@@ -23,10 +23,13 @@ import sys
 import time
 from functools import wraps
 from collections import OrderedDict
-from exceptions import NsxError
+
+from nsxramlclient.exceptions import NsxError
+from nsxramlclient.exceptions import XMLParseError
 
 import requests
 from lxml import etree as et
+from lxml.etree import XMLSyntaxError
 import OpenSSL.SSL
 import json
 
@@ -100,7 +103,16 @@ class Session(object):
 
         if 'content-type' in response.headers:
             if response.headers['content-type'].find('application/xml') != -1:
-                response_content = xmloperations.xml_to_dict(et.fromstring(response.content))
+                try:
+                    response_content = xmloperations.xml_to_dict(et.fromstring(response.content))
+                except XMLSyntaxError:
+                    if self.fail_mode == 'exit':
+                        sys.exit('NSX_Manager returned corrupted XML : {}'.format(response.content))
+                    elif self.fail_mode == 'raise':
+                        raise XMLParseError(xml=response.content)
+                    elif self.fail_mode == 'continue':
+                        pass  # will return None
+
             elif response.headers['content-type'].find('application/json') != -1:
                 response_content = json.loads(response.content)
             else:

@@ -44,3 +44,14 @@ class NsxError(Error):
 
     def __str__(self):
         return '\nstatus code: {}\nerror message: {}'.format(self.status, self.msg)
+
+
+class XMLParseError(Error):
+    """
+    Exception raised if nsx_manager respond with corrupted XML body
+    """
+    def __init__(self, xml):
+        self.msg = xml
+
+    def __str__(self):
+        return 'NSX_Manager returned corrupted XML : {}'.format(self.msg)
