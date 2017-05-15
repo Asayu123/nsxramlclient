@@ -1,0 +1,1 @@
+NSX_RAML_PATH = 'nsxraml/nsxvapi.raml'
