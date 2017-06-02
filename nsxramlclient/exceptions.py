@@ -55,4 +55,10 @@ class XMLParseError(Error):
         self.orignal_err = original_err
 
     def __str__(self):
-        return 'NSX_Manager returned corrupted XML : {}, original Error:{1}'.format(self.xml, self.orignal_err)
+        """
+        :return: Error Message like this -
+        NSX_Manager returned corrupted XML : <?xml version="1.0" encoding="UTF-8"?>
+        <dummy>brokenXML, original Error:Premature end of data in tag dummy line 2, line 2, column 17 (line 2)
+        """
+        
+        return 'NSX_Manager returned corrupted XML : {},original Error :{1}'.format(self.xml, self.orignal_err)
