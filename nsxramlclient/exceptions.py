@@ -50,8 +50,9 @@ class XMLParseError(Error):
     """
     Exception raised if nsx_manager respond with corrupted XML body
     """
-    def __init__(self, xml):
-        self.msg = xml
+    def __init__(self, xml, original_err):
+        self.xml = xml
+        self.orignal_err = original_err
 
     def __str__(self):
-        return 'NSX_Manager returned corrupted XML : {}'.format(self.msg)
+        return 'NSX_Manager returned corrupted XML : {}, original Error:{1}'.format(self.xml, self.orignal_err)
