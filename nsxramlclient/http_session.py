@@ -107,7 +107,8 @@ class Session(object):
                     response_content = xmloperations.xml_to_dict(et.fromstring(response.content))
                 except XMLSyntaxError as e:
                     if self.fail_mode == 'exit':
-                        sys.exit('NSX_Manager returned corrupted XML : {0}, original Error:{1}'.format(response.content, e))
+                        print('NSX_Manager returned corrupted XML : {0}, original Error:{1}'.format(response.content, e))
+                        sys.exit(1)
                     elif self.fail_mode == 'raise':
                         raise XMLParseError(xml=response.content, original_err=e)
                     elif self.fail_mode == 'continue':
